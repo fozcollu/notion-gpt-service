@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const app = express();
-const port = 3000;
+const port = 4000;
 
 // Configuration
 const NOTION_TOKEN = 'secret_u0SoCHFxWY7If76NpPmt3sCyQrxPV8BSRLez8nNDtDR';
@@ -13,6 +13,7 @@ const headers = {
     "Content-Type": "application/json",
     "Notion-Version": NOTION_VERSION
 };
+
 
 async function findParentPageId(parentPageName) {
     const searchResponse = await axios.post('https://api.notion.com/v1/search', {
@@ -113,6 +114,9 @@ async function takeNote(pageName, content, parentPageName = null) {
     await appendContentToPage(pageId, content);
 }
 
+app.get('/', (req, res) => {
+    res.send('Hey this is my API running 🥳')
+  })
 
 app.use(express.json()); // Middleware to parse JSON bodies
 
@@ -133,3 +137,5 @@ app.post('/takeNote', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
+
+module.exports = app
